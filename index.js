@@ -84,6 +84,39 @@ const addData = () => {
 }
 
 
+function updateJsonFile(data) {
+  fs.writeFile("empData.json", JSON.stringify(data), err => { 
+    // Checking for errors 
+    if (err) throw err;  
+    console.log("\n******* Employee details is deleted... *******\n");
+    showQuestions();
+  });
+}
+
+
+// Delete record
+function deleteData() {
+  let flag = true;
+  rl.question("Enter employee id, to delete records: ", (id) => {
+    fs.readFile('empData.json', 'utf8', (err, data) => {
+      if (err) console.log(err);
+      const users = JSON.parse(data); 
+      for (let i = 0; i < users.length; i++) {
+        if (users[i].empId === id) {
+          users.splice(i,1);
+          flag = false;
+          updateJsonFile(users);   
+          break;
+        }
+      }
+      if (flag) {
+        console.log("\n ******* Record is found... *******\n");
+        showQuestions();
+      }
+    });
+  });
+}
+
 const showQuestions = () => {
   let questions = '********************* \n1) Add Employee Details? \n2) Change Employee Details? \n3) Delete Employee Details? \n4) View all Records? \n5) Do you want to exit? \n\nPlease enter appropriate number:';
   rl.question(questions, (answer) => {
