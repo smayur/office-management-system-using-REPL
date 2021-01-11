@@ -117,6 +117,57 @@ function deleteData() {
   });
 }
 
+// Update record
+function updateData() {
+  let flag = true;
+  rl.question("Enter employee id, to update records: ", (id) => {
+    fs.readFile('empData.json', 'utf8', (err, data) => {
+      if (err) console.log(err);
+      const users = JSON.parse(data); 
+      for (let i = 0; i < users.length; i++) {
+        if (users[i].empId === id) {
+          flag = false;
+          const empDetails = {};
+          rl.question(`Enter employee id, (${users[i].empId}): `, (id) => {
+            empDetails.empId = id;
+            rl.question(`Enter employee name, (${users[i].name}): `, (name) => {
+              if (nameValidation(name)) {
+                empDetails.name = name; 
+              } else {
+                console.log("\n******* Please do not use any number or alph-numeric value... *******\n");
+                showQuestions();
+              }
+              rl.question(`Enter employee email, (${users[i].email}): `, (email) => {
+                if (emailValidation(email)) {
+                  empDetails.email = email;
+                } else {
+                  console.log("\n******* Please enter coorect mail id, eg.(name@domain.com)... *******\n");
+                  showQuestions();
+                }
+                rl.question(`Enter employee profile, (${users[i].profile}): `, (profile) => {
+                  empDetails.profile = profile;
+                  users.splice(i,1);
+                  users.push(empDetails)
+                  fs.writeFile("empData.json", JSON.stringify(users), err => { 
+                    if (err) throw err;  
+                    console.log("\n******* Employee details are updated... *******\n"); 
+                    showQuestions();
+                  }); 
+                });
+              });
+            });
+          });
+          break;
+        }
+      }
+      if (flag) {
+        console.log("\n******* Record is found... *******\n");
+        showQuestions();
+      }
+    });
+  });
+}
+
 const showQuestions = () => {
   let questions = '********************* \n1) Add Employee Details? \n2) Change Employee Details? \n3) Delete Employee Details? \n4) View all Records? \n5) Do you want to exit? \n\nPlease enter appropriate number:';
   rl.question(questions, (answer) => {
