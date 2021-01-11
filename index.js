@@ -84,7 +84,7 @@ const addData = () => {
 }
 
 
-function updateJsonFile(data) {
+const updateJsonFile = (data) =>{
   fs.writeFile("empData.json", JSON.stringify(data), err => { 
     // Checking for errors 
     if (err) throw err;  
@@ -95,7 +95,7 @@ function updateJsonFile(data) {
 
 
 // Delete record
-function deleteData() {
+const deleteData = () =>{
   let flag = true;
   rl.question("Enter employee id, to delete records: ", (id) => {
     fs.readFile('empData.json', 'utf8', (err, data) => {
@@ -118,7 +118,7 @@ function deleteData() {
 }
 
 // Update record
-function updateData() {
+const updateData = () =>{
   let flag = true;
   rl.question("Enter employee id, to update records: ", (id) => {
     fs.readFile('empData.json', 'utf8', (err, data) => {
